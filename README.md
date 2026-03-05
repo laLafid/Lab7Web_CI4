@@ -11,7 +11,8 @@ untuk WebApp simple
     
     - XAMPP, kalo belum punya unduh dulu di [sini](https://www.apachefriends.org/).
 
-    - Buka XAMPP control panel dulu, aktifin ``apache`` lalu ke![alt text](gambar/amp1.png) 
+    - Buka XAMPP control panel dulu, aktifin ``apache`` lalu ke ```php.ini```
+    ![alt text](gambar/amp1.png) 
 
     buat aktifin 
     ![alt text](gambar/ampini.png)
