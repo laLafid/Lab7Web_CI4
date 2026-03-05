@@ -1,0 +1,72 @@
+/* import google font */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+:root{--color-primary:#4a90e2;--color-secondary:#f4f7f6;--color-dark-text:#1a202c;--color-light-text:#718096;--color-bg-light:#ffffff;--color-border:#edf2f7;--color-accent:#e2e8f0}
+
+/* Reset CSS */
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{line-height:1.6;font-size:16px;font-family:"Inter",sans-serif;color:var(--color-dark-text);background-color:var(--color-bg-light);-webkit-font-smoothing:antialiased}
+#container{max-width:1000px;width:95%;margin:0 auto}
+
+/* header */
+header{padding:40px 20px;background:var(--color-bg-light);border-bottom:1px solid var(--color-border)}
+header h1{color:var(--color-dark-text);font-weight:700;letter-spacing:-1px;text-align:center}
+
+/* navbar */
+nav{display:flex;justify-content:center;background-color:#ffffff;border-top:1px solid var(--color-border);border-bottom:2px solid var(--color-dark-text)}
+nav a{padding:18px 30px;display:inline-block;color:var(--color-dark-text);font-size:13px;text-decoration:none;font-weight:700;text-transform:uppercase;letter-spacing:1px;transition:all .2s ease;position:relative}
+nav a::after{content:'';position:absolute;bottom:0;left:50%;width:0;height:3px;background-color:var(--color-primary);transition:all .3s ease;transform:translateX(-50%)}
+nav a:hover{color:var(--color-primary)}
+nav a.active::after,
+nav a:hover::after{width:100%}
+nav a:not(:last-child){border-right:1px solid var(--color-border)}
+
+/* Hero Panel */
+#hero{background:var(--color-secondary);padding:80px 20px;color:var(--color-dark-text);text-align:center}
+#hero h1{margin-bottom:15px;font-size:36px;font-weight:700}
+#hero p{margin-bottom:0;font-size:18px;color:var(--color-light-text);max-width:600px;margin-left:auto;margin-right:auto}
+
+#wrapper{display:flex;background-color:#ffffff;border-bottom:1px solid var(--color-border)}
+#main{flex:1;padding:40px}
+
+/* sidebar area */
+#sidebar{width:280px;padding:40px 20px;background-color:#fcfcfc;border-left:1px solid var(--color-border)}
+
+/* widget */
+ .widget-box{border:none;margin-bottom:30px;background-color:transparent}
+ .widget-box .title{padding:0 0 10px 0;background:transparent;color:var(--color-dark-text);font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;border-bottom:2px solid var(--color-primary);margin-bottom:15px}
+ .widget-box ul{list-style-type:none}
+ .widget-box li{border-bottom:1px solid var(--color-border)}
+ .widget-box li a{padding:10px 0;color:var(--color-light-text);display:block;text-decoration:none}
+ .widget-box li:hover a{background-color:transparent;color:var(--color-primary);padding-left:5px}
+
+/* footer */
+footer{background:var(--color-bg-light);padding:60px 20px;color:var(--color-light-text);text-align:center;border-top:1px solid var(--color-border);font-size:14px}
+
+/* box sections (3 columns) */
+ .box-container{display:flex;gap:20px;padding:40px 0}
+ .box{flex:1;text-align:center}
+ .box h3{margin:15px 0;font-size:18px}
+ .box-img-wrapper{border-radius:4px;background:var(--color-secondary);overflow:hidden}
+ .box img{filter:grayscale(100%);transition:filter .3s ease}
+ .box:hover img{filter:grayscale(0%);transform:none}
+
+/* entry */
+ .entry{margin-bottom:40px;padding:0}
+ .entry h2{font-size:28px;margin-bottom:15px}
+ .entry img{border-radius:4px;box-shadow:none}
+
+/* buttons */
+ .btn{display:inline-block;padding:12px 24px;text-decoration:none;border-radius:4px;font-weight:600;font-size:14px;transition:opacity .2s}
+ .btn-default{background-color:var(--color-dark-text);color:#ffffff}
+ .btn-default:hover{background-color:var(--color-primary);transform:none;box-shadow:none}
+
+/* Form Section */
+ .form-section{background-color:var(--color-secondary);padding:40px;border-radius:0;box-shadow:none}
+ .form-group input,
+ .form-group textarea{border:1px solid var(--color-accent);border-radius:4px;background:#ffffff}
+ .form-group input:focus, 
+ .form-group textarea:focus{border-color:var(--color-primary);box-shadow:none}
+ .submit-btn{background:var(--color-primary);border-radius:4px;text-transform:uppercase;letter-spacing:1px}
+ .submit-btn:hover{opacity:.9;transform:none;box-shadow:none}
