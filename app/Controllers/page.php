@@ -1,37 +1,23 @@
 <?php
+
 namespace App\Controllers;
+
 class Page extends BaseController
 {
-    public function about()
+    public function getIndex()
     {
-        return view('about', [
-            'title' => 'About'
-        ]);
+        return view('vi/home', ['title' => 'Home']);
     }
-    public function contact()
+    public function getAbout()
     {
-        return view('contact', [
-            'title' => 'Kontak',
-            'content' => 'Ini adalah halaman kontak yang akan mengarahkan kalian ke pihak yang bertanggungjaWab atas ini page.'
-        ]);
+        return view('vi/about', ['title' => 'About']);
     }
-    public function artikel()
+    public function getArtikel()
     {
-        return view('article', [
-            'title' => 'Artikel',
-            'content' => 'biasanya diisi dengan artikel
-            
-            
-            
-            artikel 1
-            
-            
-            
-            
-
-
-            artikel 3
-            .'
-        ]);
+        return view('vi/article', ['title' => 'Artikel']);
+    }
+    public function getContact()
+    {
+        return view('vi/contact', ['title' => 'Kontak']);
     }
 }

@@ -4,12 +4,8 @@ namespace App\Controllers;
 
 class Home extends BaseController
 {
-    public function index()
+    public function getIndex()
     {
-        return view('liat', [
-            'title' => 'Halaman liat',
-            'content' => 'Ini adalah halaman abaut yang menjelaskan tentang isi
-halaman ini.'
-        ]);
+        return view('vi/home', ['title' => 'Home']);
     }
 }
