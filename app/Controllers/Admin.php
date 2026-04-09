@@ -7,7 +7,7 @@ use CodeIgniter\Router\Attributes\Filter;
 class Admin extends BaseController
 {
     public function getIndex()
-    {
+    { 
         $title = 'Daftar Artikel';
         $model = new ArtikelModel();
         $artikel = $model->findAll();

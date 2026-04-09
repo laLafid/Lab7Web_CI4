@@ -42,6 +42,6 @@ menghapus data?');" href="<?= base_url('/admin/delete/' .
         </tr>
     </tfoot>
 </table>
-<?= $pager->links(); ?>
+<?= $pager->links(); ?> 
 
 <?= $this->include('template/admin_footer'); ?>
