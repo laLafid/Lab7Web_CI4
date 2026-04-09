@@ -315,6 +315,7 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     - Untuk menampilkan page, ke ``app/Views/artikel/admin_index.php`` tambahin ini: ``<?= $pager->links(); ?>`` tepat dibawah table.
     ![alt text](gambar/tutor/Paginat.png)
     <sub>*abaikan angka 12 itu, numbering disana agak rancu (ada data yang dihapus)*<sub>
+    m
 
 
 
