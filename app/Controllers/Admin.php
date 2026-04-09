@@ -11,7 +11,12 @@ class Admin extends BaseController
         $title = 'Daftar Artikel';
         $model = new ArtikelModel();
         $artikel = $model->findAll();
-        return view('artikel/admin_index', compact('artikel', 'title'));
+        $data = [
+            'title' => $title,
+            'artikel' => $model->paginate(10), #data dibatasi 10 record per halaman
+            'pager' => $model->pager,
+        ];
+        return view('artikel/admin_index', $data);
     }
     public function getAdd()
     {
@@ -30,7 +35,7 @@ class Admin extends BaseController
                 'judul' => $this->request->getPost('judul'),
                 'isi' => $this->request->getPost('isi'),
                 'slug' => url_title($this->request->getPost('judul')),
-                'kategori' => $this->request->getPost('kategori'), 
+                'kategori' => $this->request->getPost('kategori'),
             ]);
             return redirect()->to('/admin')->with('success', 'Data di tambah!');
         }

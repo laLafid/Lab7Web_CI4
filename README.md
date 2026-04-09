@@ -299,6 +299,26 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     ![alt text](gambar/tutor/login.png)
 
 
+6. **Part 5 : Pagination dan Pencarian**
+    - Buat paging di index admin dengan model paginasi yang tersedia, ke ``app/Controller/Admin.php`` dan tambahin beberapa line ini 
+    ```php
+    $model = new ArtikelModel();
+        $artikel = $model->findAll();
+        $data = [
+            'title' => $title,
+            'artikel' => $model->paginate(10), #data dibatasi 10 record per halaman
+            'pager' => $model->pager,
+        ];
+        return view('artikel/admin_index', $data);
+    ```
+
+    - Untuk menampilkan page, ke ``app/Views/artikel/admin_index.php`` tambahin ini: ``<?= $pager->links(); ?>`` tepat dibawah table.
+    ![alt text](gambar/tutor/Paginat.png)
+    <sub>*abaikan angka 12 itu, numbering disana agak rancu (ada data yang dihapus)*<sub>
+
+
+
+
 
 ## Hasil Akhir
 
