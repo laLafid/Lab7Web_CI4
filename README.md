@@ -8,15 +8,15 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
 
 1. **Persiapan**
     - Editornya, misal Visual Studio Code.
-    ![alt text](gambar/tutor/vs.png)
+    ![alt text](public/gambar/tutor/vs.png)
     
     - XAMPP, kalo belum punya unduh dulu di [sini](https://www.apachefriends.org/).
 
     - Buka XAMPP control panel dulu, aktifin ``apache`` dan ```mysql``` lalu ke ```php.ini```
-    ![alt text](gambar/tutor/amp1.png) 
+    ![alt text](public/gambar/tutor/amp1.png) 
     
     buat aktifin 
-    ![alt text](gambar/tutor/ampini.png)
+    ![alt text](public/gambar/tutor/ampini.png)
 
 
 
@@ -39,14 +39,14 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     }
     ```
 
-    - hapus rute di dalam [Routes.php](app/Config/Routes.php) jadi seperti ini:![alt text](gambar/tutor/autoroute.png) agar autoroute bisa berjalan normal. 
+    - hapus rute di dalam [Routes.php](app/Config/Routes.php) jadi seperti ini:![alt text](public/gambar/tutor/autoroute.png) agar autoroute bisa berjalan normal. 
 
     - Buat folder ```template``` di ```/app/views``` isi pake file [header.php](app/Views/template/header.php) dan [footer.php](app/Views/template/footer.php).
 
     - Buat CSS dan taruh di ```/publik```.
 
     - Nanti hasilnya gini:
-    ![alt text](gambar/tutor/abot.png)
+    ![alt text](public/gambar/tutor/abot.png)
 
 
 
@@ -68,7 +68,7 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     ``` 
 
     - Set up [.env](.env) nya biar baca db
-    ![alt text](gambar/tutor/dbenv.png)
+    ![alt text](public/gambar/tutor/dbenv.png)
 
     - Buat model untuk proses data artikel, di dalam folder ```app/models``` buat [ArtikelModel](app/Models/ArtikelModel.php)
     ```php
@@ -121,7 +121,7 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     - Di ```app/Views/template``` tambahin [admin_header.php](app/Views/template/admin_header.php) dan [admin_footer.php](app/Views/template/admin_footer.php).
 
     - Tampilan nya:
-    ![alt text](gambar/tutor/lcrud.png)
+    ![alt text](public/gambar/tutor/lcrud.png)
 
 
 4. **Part 3 : View Layout dan View Cell**
@@ -192,7 +192,7 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
 
 
     - Akhirnya seperti ini:
-    ![alt text](gambar/tutor/layput.png)
+    ![alt text](public/gambar/tutor/layput.png)
 
 
 
@@ -280,9 +280,9 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     ```
 
     - Tambahin ```'auth' => \App\Filters\Auth::class``` di ``app/Config/Filters.php``
-    ![alt text](gambar/tutor/filter.png), 
+    ![alt text](public/gambar/tutor/filter.png), 
     
-    dan ``use CodeIgniter\Router\Attributes\Filter #[Filter(by: 'auth')]`` di ``app/Controllers/Admin.php`` ![alt text](gambar/tutor/adminfilter.png)
+    dan ``use CodeIgniter\Router\Attributes\Filter #[Filter(by: 'auth')]`` di ``app/Controllers/Admin.php`` ![alt text](public/gambar/tutor/adminfilter.png)
 
     Kemudian bisa langsung coba akses ``http://localhost/project-root/public/admin/add`` sebelum login (#nanti kena redirect ke login page).
 
@@ -296,7 +296,7 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     ```
 
     - Tampilan login nya:
-    ![alt text](gambar/tutor/login.png)
+    ![alt text](public/gambar/tutor/login.png)
 
 
 6. **Part 5 : Pagination dan Pencarian**
@@ -313,10 +313,252 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     ```
 
     - Untuk menampilkan page, ke ``app/Views/artikel/admin_index.php`` tambahin ini: ``<?= $pager->links(); ?>`` tepat dibawah table.
-    ![alt text](gambar/tutor/Paginat.png)
-    <sub>*abaikan angka 12 itu, numbering disana agak rancu (ada data yang dihapus)*
+    ![alt text](public/gambar/tutor/Paginat.png)
+    <sub>*abaikan angka 12 itu, numbering disana agak rancu (ada data yang dihapus)*</sub>
+
+    - Membuat Pencarian, di buka lagi ``app/Controller/Admin.php``-nya. tambahin q.
+    ```php
+     $q = $this->request->getVar('q') ?? '';
+        $data = [
+            'title' => $title,
+            'q' => $q,
+            'artikel' => $model->like('judul', $q)->paginate(10), #data dibatasi 10 record per halaman
+            'pager' => $model->pager,
+        ];
+    ```
     
+    - balik lagi ke ``app/Views/artikel/admin_index.php`` tambahin ini: 
+    ```html
+    <form method="get" class="form-search">
+        <input type="text" name="q" value="<?= $q; ?>" placeholder="Cari data">
+        <input type="submit" value="Cari" class="btn btn-primary">
+    </form>
+    ```
+    ```php
+    <?= $pager->only(['q'])->links(); ?>
+    ```
+
+    - Tampilannya
+    ![alt text](public/gambar/tutor/cari.png)
+    ![alt text](public/gambar/tutor/page.png)
+
+
+
+7. **Part 6 : Relasi Tabel dan Query Builder**
+    - Sebelumnya udah pake attribut kategori sederhana, sekarang akan buat tabel kategorinya.
+    Jalankan query 
+    ```sql
+    CREATE TABLE kategori (
+    id_kategori INT(11) AUTO_INCREMENT,
+    nama_kategori VARCHAR(100) NOT NULL,
+    slug_kategori VARCHAR(100),
+    PRIMARY KEY (id_kategori)
+    );
+    ```
+
+    ```sql
+    ALTER TABLE artikel
+    ADD COLUMN id_kategori INT(11),
+    ADD CONSTRAINT fk_kategori_artikel
+    FOREIGN KEY (id_kategori) REFERENCES kategori(id_kategori);
+    ```
+
+    - Buat model baru [KategoriModel](app/Models/KategoriModel.php) 
+
+    - Perubahan di beberapa file 
+    [ArtikelModel](app/Models/ArtikelModel.php)
+    ```php
+    <?php 
+    namespace App\Models; 
+    use CodeIgniter\Model; 
+    class ArtikelModel extends Model 
+    { 
+        protected $table = 'artikel'; 
+        protected $primaryKey = 'id'; 
+        protected $useAutoIncrement = true; 
+        protected $allowedFields = ['judul', 'isi', 'status', 'slug', 'gambar', 'id_kategori', 'created_at'];  // baru
     
+        public function getArtikelDenganKategori() // baru
+        {
+        return $this->db->table('artikel')
+        ->select('artikel.*, kategori.nama_kategori')
+        ->join('kategori', 'kategori.id_kategori = artikel.id_kategori')
+        ->get()
+        ->getResultArray();
+        }
+    } 
+    ```
+
+    [Artikel](app/Controllers/Artikel.php)
+    ```php
+    <?php
+    namespace App\Controllers;
+    use App\Models\ArtikelModel;
+    use CodeIgniter\Exceptions\PageNotFoundException;
+    use App\Models\KategoriModel;
+
+    class Artikel extends BaseController
+    {
+        public function getIndex()
+        {
+            $title = 'Daftar Artikel';
+            $model = new ArtikelModel();
+            $artikel = $model->getArtikelDenganKategori(); // baru
+            return view('artikel/index', compact('artikel', 'title'));
+        }
+        public function getView($slug) 
+        {
+            $model = new ArtikelModel();
+            $data['artikel'] = $model->where('slug', $slug)->first();
+            if (empty($data['artikel'])) {
+                throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the article.');
+            }
+            $data['title'] = $data['artikel']['judul'];
+            return view('artikel/detail', $data);
+        }
+    }
+    ```
+
+    [Admin](app/Controllers/Admin.php)
+    ```php
+    <?php
+    namespace App\Controllers;
+    use App\Models\ArtikelModel;
+    use App\Models\KategoriModel;
+    use CodeIgniter\Router\Attributes\Filter;
+
+    #[Filter(by: 'auth')]
+    class Admin extends BaseController
+    {
+        public function getIndex()
+        {
+            $title = 'Daftar Artikel (Admin)';
+            $model = new ArtikelModel();
+
+            $q = $this->request->getVar('q') ?? '';
+            $kategori_id = $this->request->getVar('kategori_id') ?? '';
+
+            $data = [
+                'title'      => $title,
+                'q'          => $q,
+                'kategori_id'=> $kategori_id,
+            ];
+
+            $builder = $model->table('artikel')  // baru
+                ->select('artikel.*, kategori.nama_kategori')
+                ->join('kategori', 'kategori.id_kategori = artikel.id_kategori');
+
+            if ($q != '') {
+                $builder->like('artikel.judul', $q);
+            }
+            if ($kategori_id != '') {
+                $builder->where('artikel.id_kategori', $kategori_id);
+            }
+
+            $data['artikel'] = $builder->paginate(10);
+            $data['pager']   = $model->pager;
+
+            $kategoriModel   = new KategoriModel();
+            $data['kategori'] = $kategoriModel->findAll();
+
+            return view('artikel/admin_index', $data);
+        }
+
+        public function getAdd()
+        {
+            $kategoriModel = new KategoriModel();
+            return view('artikel/form_add', [
+                'title'   => 'Tambah Artikel',
+                'kategori'=> $kategoriModel->findAll(),
+            ]);
+        }
+
+        public function postAdd() // baru
+        {
+            if ($this->validate([
+                'judul'       => 'required',
+                'id_kategori' => 'required|integer'
+            ])) {
+                $model = new ArtikelModel();
+                $model->insert([
+                    'judul'       => $this->request->getPost('judul'),
+                    'isi'         => $this->request->getPost('isi'),
+                    'slug'        => url_title($this->request->getPost('judul'), '-', true),
+                    'id_kategori' => $this->request->getPost('id_kategori')
+                ]);
+                return redirect()->to('/admin')->with('success', 'Data di tambah!');
+            }
+            return redirect()->back()->withInput(); 
+        }
+
+        public function getEdit($id) // baru
+        {
+            $model         = new ArtikelModel();
+            $kategoriModel = new KategoriModel();
+            return view('artikel/form_edit', [
+                'title'   => 'Edit Artikel',
+                'artikel' => $model->find($id),
+                'kategori'=> $kategoriModel->findAll(),
+            ]);
+        }
+
+        public function postEdit($id)
+        {
+            $model = new ArtikelModel();
+            if ($this->validate([                   // baru
+                'judul'       => 'required',
+                'id_kategori' => 'required|integer'
+            ])) {
+                $model->update($id, [
+                    'judul'       => $this->request->getPost('judul'),
+                    'isi'         => $this->request->getPost('isi'),
+                    'id_kategori' => $this->request->getPost('id_kategori')
+                ]);
+                return redirect()->to('/admin')->with('success', 'Data di edit!');
+            }
+            return redirect()->back()->withInput(); 
+        }
+
+        public function getDelete($id)
+        {
+            $model = new ArtikelModel();
+            $model->delete($id);
+            return redirect()->to('/admin')->with('success', 'Data di hapus!'); 
+        }
+    }
+    ```
+
+    dan selebihnya [index](app/Views/artikel/index.php), [admin_index](app/Views/artikel/admin_index.php), [form_add](app/Views/artikel/form_add.php), [form_edit](app/Views/artikel/form_edit.php)
+
+    - Tampaknya
+    ![alt text](public/gambar/tutor/kategori.png)
+    ![alt text](public/gambar/tutor/kategoriall.png)
+    
+
+
+8. **Part 7 : Upload File Gambar**
+    - Menambahkan fungsi unggah gambar di dalam controler [Admin.php](app/Controllers/Admin.php)
+    ```php
+    $file = $this->request->getFile('gambar');
+    $file->move(ROOTPATH . 'public/gambar/app');
+
+    $model = new ArtikelModel();
+    $model->insert([
+        'judul'       => $this->request->getPost('judul'),
+        'isi'         => $this->request->getPost('isi'),
+        'slug'        => url_title($this->request->getPost('judul'), '-', true),
+        'id_kategori' => $this->request->getPost('id_kategori'),
+        'gambar' => $file->getName(),
+    ]);
+    ```
+
+    - Kemudian pada file [form_add.php](app/Views/artikel/form_add.php), tambahkan fiel input ```<p><input type="file" name="gambar"></p>``` dan sesuaikan tag form dengan ecrypt type ```<form action="" method="post" enctype="multipart/form-data">```
+
+    - Tampaknya
+    ![alt text](public/gambar/tutor/gambar.png)
+    ![alt text](<public/gambar/tutor/ini aja.png>)
+
+
 
 
 
@@ -329,32 +571,32 @@ untuk WebApp simple pake framework Codeigniter 4 (4.7.2)
     **Admin**:
 
     [Admin Dashboard](app/Views/artikel/admin_index.php)
-    ![alt text](gambar/tutor/admindadn.png)
+    ![alt text](public/gambar/tutor/admindadn.png)
 
     [Edit Artikel](app/Views/artikel/form_edit.php)
-    ![alt text](gambar/tutor/editart.png)
+    ![alt text](public/gambar/tutor/editart.png)
 
     [Add Artikel](app/Views/artikel/form_add.php)
-    ![alt text](gambar/tutor/tambahin.png)
+    ![alt text](public/gambar/tutor/tambahin.png)
 
     **Login Page**:
     [Login](app/Views/user/login.php)
-    ![alt text](gambar/tutor/login.png)
+    ![alt text](public/gambar/tutor/login.png)
 
     **User**:
 
     [Home](app/Views/vi/home.php)
-    ![alt text](gambar/tutor/home.png)
+    ![alt text](public/gambar/tutor/home.png)
 
     [About](app/Views/vi/about.php)
-    ![alt text](gambar/tutor/about.png)
+    ![alt text](public/gambar/tutor/about.png)
 
     [Artikel](app/Views/artikel/index.php)
-    ![alt text](gambar/tutor/article.png)
-    ![alt text](gambar/tutor/articledua.png)
+    ![alt text](public/gambar/tutor/article.png)
+    ![alt text](public/gambar/tutor/articledua.png)
 
     [Kontak](app/Views/vi/contact.php)
-    ![alt text](gambar/tutor/kontak.png)
+    ![alt text](public/gambar/tutor/kontak.png)
     
 
 ## Akhir Kata

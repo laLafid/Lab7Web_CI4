@@ -1,6 +1,9 @@
 <?= $this->extend('layout/main') ?>
 <?= $this->section('content') ?>
-<h1><?= $title; ?></h1>
-<hr>
-<p>hay homiee</p>
+
+<section id="hero">
+    <h1>Selamat Datang di Doofun!</h1>
+    <p>Temukan apa yang kau tidak temukan</p>
+</section>
+
 <?= $this->endSection() ?>

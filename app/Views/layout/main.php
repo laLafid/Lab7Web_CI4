@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'My Website' ?></title>
-    <link rel="stylesheet" href="<?= base_url('/style.css'); ?>">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?= base_url('assets/css/style.css'); ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/bootstrap.min.css'); ?>">
+    <script src="<?= base_url('assets/js/jquery-4.0.0.min.js') ?>"></script>
+    <script src="<?= base_url('assets/js/bootstrap.bundle.min.js') ?>"></script>
 </head>
 
 <body>
@@ -14,43 +15,40 @@
         <header>
             <h1>Layout Sederhana</h1>
         </header>
+
+        <?php 
+        $current = strtolower(uri_string()); 
+        ?>
         <nav>
-            <?php $current_page = uri_string(); ?>
-            <a href="<?= base_url('/'); ?>" class="<?= ($current_page == '/') ? 'active' : ''; ?>">Home</a>
-            <a href="<?= base_url('artikel'); ?>"
-                class="<?= ($current_page == 'page/artikel') ? 'active' : ''; ?>">Artikel</a>
-            <a href="<?= base_url('page/about'); ?>"
-                class="<?= ($current_page == 'page/about') ? 'active' : ''; ?>">About</a>
-            <a href="<?= base_url('page/contact'); ?>"
-                class="<?= ($current_page == 'page/contact') ? 'active' : ''; ?>">Kontak</a>
+            <a href="<?=base_url(); ?>" class="<?=in_array($current, ['', '/']) ? 'active' : ''; ?>">HOME</a>
+            <a href="<?=base_url('artikel'); ?>" class="<?=strpos($current, 'artikel')===0 ? 'active' : ''; ?>">ARTIKEL</a>
+            <a href="<?=base_url('page/about'); ?>" class="<?=$current==='page/about' ? 'active' : ''; ?>">ABOUT</a>
+            <a href="<?=base_url('page/contact'); ?>" class="<?=$current==='page/contact' ? 'active' : ''; ?>">KONTAK</a>
+            <a href="<?=base_url('user/login'); ?>" class="<?=strpos($current, 'user/login')===0 ? 'active' : ''; ?>">LOGIN</a>
         </nav>
         <section id="wrapper">
             <section id="main">
                 <?= $this->renderSection('content') ?>
             </section>
+
             <aside id="sidebar">
-                <?= view_cell('App\\Cells\\ArtikelTerkini::render', ['kategori' => 'teknologi']) ?>
                 <div class="widget-box">
-                    <h3 class="title">Widget Header</h3>
-                    <ul>
-                        <li><a href="#">Widget Link</a></li>
-                        <li><a href="#">Widget Link</a></li>
-                    </ul>
+                    <?= view_cell('App\\Cells\\ArtikelTerkini::render', ['kategori' => 'random', 'limit' => 3]) ?>
+                </div>
+
+                <div class="widget-box">
+                    <h3 class="title">Artikel Pilihan</h3>
+                    <?= view_cell('App\\Cells\\RandomArtikel::render', ['limit' => 2]) ?>
                 </div>
                 <div class="widget-box">
-                    <h3 class="title">Widget Text</h3>
-                    <p>Vestibulum lorem elit, iaculis in nisl volutpat,
-                        malesuada tincidunt arcu. Proin in leo fringilla,
-                        vestibulum mi porta,
-                        faucibus felis. Integer pharetra est nunc, nec pretium
-                        nunc pretium ac.</p>
+                    <h3 class="title">INFO</h3>
+                    <p>Vestibulum lorem elit, iaculis in nisl volutpat, malesuada tincidunt arcu. Proin in leo fringilla.</p>
                 </div>
             </aside>
         </section>
         <footer>
-            <p>&copy; 2021 - Universitas Pelita Bangsa</p>
+            <p>&copy; <?= date('Y') ?> - Lafid | All Rights Reserved</p>
         </footer>
     </div>
 </body>
-
 </html>
